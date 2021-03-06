@@ -1,4 +1,4 @@
-package handlers
+package auth
 
 import (
 	"errors"
@@ -9,29 +9,6 @@ import (
 	"github.com/vking34/fiber-messenger/utils"
 	"gorm.io/gorm"
 )
-
-type loginRequest struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-}
-
-// Login user login
-func Login(c *fiber.Ctx) error {
-
-	var req loginRequest
-	if err := c.BodyParser(&req); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"status": false, "message": "Error on login request", "error": err})
-	}
-
-	username := req.Username
-	pass := req.Password
-
-	return c.JSON(fiber.Map{
-		"status":   true,
-		"username": username,
-		"pass":     pass,
-	})
-}
 
 type registerReq struct {
 	Username string `json:"username"`

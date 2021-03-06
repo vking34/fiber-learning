@@ -1,7 +1,10 @@
 # Fiber Messenger
 A Go project I am working on for learing Go
 
-
+## Learning cases:
+- Gorm
+- JWT
+- OAUTH
 
 ## References:
 - Fiber:

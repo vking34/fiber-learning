@@ -3,7 +3,7 @@ package routers
 import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
-	"github.com/vking34/fiber-messenger/handlers"
+	authRouter "github.com/vking34/fiber-messenger/handlers/auth"
 )
 
 // SetupRoutes setup route api
@@ -13,6 +13,6 @@ func SetupRoutes(app *fiber.App) {
 
 	// Auth
 	auth := api.Group("/auth")
-	auth.Post("/login", handlers.Login)
-	auth.Post("/register", handlers.CreateUser)
+	auth.Post("/login", authRouter.Login)
+	auth.Post("/register", authRouter.CreateUser)
 }
