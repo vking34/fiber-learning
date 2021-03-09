@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/gofiber/fiber/v2"
+	"github.com/vking34/fiber-messenger/constants"
 	"github.com/vking34/fiber-messenger/db"
 	"github.com/vking34/fiber-messenger/models"
 	"github.com/vking34/fiber-messenger/utils"
@@ -38,17 +39,17 @@ func CreateUser(c *fiber.Ctx) error {
 		return nil
 	}
 
-	var user models.User
-	result := db.DB.Where(&models.User{Username: req.Username}).First(&user)
-
+	var users []models.User
+	result := db.DB.Where("username =?", req.Username).Or("email =?", req.Email).Find(&users)
 	if result.RowsAffected > 0 {
-		return c.Status(400).JSON(fiber.Map{
-			"status":  false,
-			"message": "Existing username",
-		})
+		if users[0].Username == req.Username {
+			return c.Status(400).JSON(constants.ExistingUsername)
+		}
+
+		return c.Status(400).JSON(constants.ExistingEmail)
 	}
 
-	if !errors.Is(result.Error, gorm.ErrRecordNotFound) {
+	if result.Error != nil && !errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		return c.Status(500).JSON(fiber.Map{
 			"status":  false,
 			"message": "Can not create user",
@@ -61,10 +62,11 @@ func CreateUser(c *fiber.Ctx) error {
 		return c.Status(500).JSON(fiber.Map{"status": false, "message": err})
 	}
 
+	var user models.User
 	user.Username = req.Username
 	user.Password = hashedPass
 	user.Name = req.Name
-
+	user.Email = req.Email
 	if err := db.DB.Create(&user).Error; err != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"status":  false,

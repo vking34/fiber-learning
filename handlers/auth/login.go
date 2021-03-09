@@ -35,7 +35,7 @@ func Login(c *fiber.Ctx) error {
 		return c.Status(400).JSON(&constants.InvalidUsernamePassword)
 	}
 
-	token, err := utils.GenerateToken(user.ID, username, 72)
+	token, err := utils.GenerateJWTToken(user.ID, username, 72)
 	if err != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"status":  false,

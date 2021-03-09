@@ -1,7 +1,6 @@
 package utils
 
 import (
-	"log"
 	"os"
 	"time"
 
@@ -17,7 +16,7 @@ func init() {
 
 // HashPassword hash pass by bcrypt
 func HashPassword(pass string) (string, error) {
-	bytes, err := bcrypt.GenerateFromPassword([]byte(pass), 12)
+	bytes, err := bcrypt.GenerateFromPassword([]byte(pass), 10)
 	return string(bytes), err
 }
 
@@ -27,15 +26,14 @@ func CheckPasswordHash(pass, hash string) bool {
 	return err == nil
 }
 
-// GenerateToken generates token
-func GenerateToken(userID uint, username string, expireHours int) (string, error) {
+// GenerateJWTToken generates token
+func GenerateJWTToken(userID uint, username string, expireHours int) (string, error) {
 	jwtGenerator := jwt.New(jwt.SigningMethodHS256)
 
 	claims := jwtGenerator.Claims.(jwt.MapClaims)
 	claims["user_id"] = username
 	claims["username"] = userID
 	claims["exp"] = time.Now().Add(time.Duration(int(time.Hour) * expireHours)).Unix()
-	log.Println("exp:", claims["exp"])
 
 	return jwtGenerator.SignedString([]byte(jwtSecret))
 }

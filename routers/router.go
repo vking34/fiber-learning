@@ -15,4 +15,7 @@ func SetupRoutes(app *fiber.App) {
 	auth := api.Group("/auth")
 	auth.Post("/login", authRouter.Login)
 	auth.Post("/register", authRouter.CreateUser)
+
+	callbacks := auth.Group("/callbacks")
+	callbacks.Post("/facebook", authRouter.FacebookCallback)
 }
