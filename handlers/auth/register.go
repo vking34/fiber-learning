@@ -11,9 +11,10 @@ import (
 )
 
 type registerReq struct {
-	Username string `json:"username"`
-	Password string `json:"password"`
-	Name     string `json:"name"`
+	Username string `json:"username" validate:"required,min=6,max=100"`
+	Password string `json:"password" validate:"required,min=6"`
+	Email    string `json:"email" validate:"required,email"`
+	Name     string `json:"name" validate:"required,min=3,max=200"`
 }
 
 type registerResp struct {
@@ -29,6 +30,12 @@ func CreateUser(c *fiber.Ctx) error {
 			"status":  false,
 			"message": err,
 		})
+	}
+
+	validationErr := utils.ValidateStruct(req)
+	if validationErr != nil {
+		c.Status(400).JSON(validationErr)
+		return nil
 	}
 
 	var user models.User
