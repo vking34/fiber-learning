@@ -8,10 +8,11 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-var jwtSecret string
+// JwtSecret secret key to gen token
+var JwtSecret string
 
 func init() {
-	jwtSecret = os.Getenv("JWT_SECRET")
+	JwtSecret = os.Getenv("JWT_SECRET")
 }
 
 // HashPassword hash pass by bcrypt
@@ -35,5 +36,5 @@ func GenerateJWTToken(userID uint, username string, expireHours int) (string, er
 	claims["username"] = userID
 	claims["exp"] = time.Now().Add(time.Duration(int(time.Hour) * expireHours)).Unix()
 
-	return jwtGenerator.SignedString([]byte(jwtSecret))
+	return jwtGenerator.SignedString([]byte(JwtSecret))
 }

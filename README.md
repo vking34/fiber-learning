@@ -2,9 +2,10 @@
 A Go project I am working on for learing Go
 
 ## Learning cases:
+- Fiber
 - Gorm
 - JWT
-- OAUTH
+- OAuth
 
 ## References:
 - Fiber:

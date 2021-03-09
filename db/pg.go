@@ -10,6 +10,9 @@ import (
 	"gorm.io/gorm"
 )
 
+// DB postgre DB
+var DB *gorm.DB
+
 // ConnectDB connect to postgre
 func ConnectDB() {
 	host := os.Getenv("POSTGRE_HOST")
