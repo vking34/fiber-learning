@@ -8,6 +8,19 @@ import (
 	"gorm.io/gorm"
 )
 
+// FindUserByID returns user
+func FindUserByID(id uint) (*models.User, error) {
+	var user models.User
+	if err := db.DB.First(&user, id).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+		return nil, err
+	}
+
+	return &user, nil
+}
+
 // FindUser find user by username
 func FindUser(username string) (*models.User, error) {
 	var user models.User
@@ -15,7 +28,6 @@ func FindUser(username string) (*models.User, error) {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
-
 		return nil, err
 	}
 
@@ -30,7 +42,6 @@ func FindUserByEmail(email string) (*models.User, error) {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
-
 		return nil, err
 	}
 

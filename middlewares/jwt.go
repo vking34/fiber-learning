@@ -2,22 +2,29 @@ package middlewares
 
 import (
 	"errors"
-	"log"
 
+	"github.com/dgrijalva/jwt-go"
 	"github.com/gofiber/fiber/v2"
-	jwtware "github.com/gofiber/jwt/v2"
 	"github.com/vking34/fiber-messenger/utils"
 )
 
 // Protect protect routes
 func Protect() fiber.Handler {
 	return func(c *fiber.Ctx) error {
-		token, err := getJwtFromHeader(c, "authorization", "Bearer")
+		tokenStr, err := getJwtFromHeader(c, "authorization", "Bearer")
 		if err != nil {
 			return jwtError(c, err)
 		}
 
-		log.Println("token", token)
+		claims := jwt.MapClaims{}
+		_, err = jwt.ParseWithClaims(tokenStr, claims, func(t *jwt.Token) (interface{}, error) {
+			return []byte(utils.JwtSecret), nil
+		})
+		if err != nil {
+			return jwtError(c, err)
+		}
+
+		c.Locals("userID", claims["userID"])
 		return c.Next()
 	}
 }
@@ -29,14 +36,6 @@ func getJwtFromHeader(c *fiber.Ctx, header string, authScheme string) (string, e
 		return auth[l+1:], nil
 	}
 	return "", errors.New("Missing or malformed JWT")
-}
-
-func Protect1() fiber.Handler {
-	return jwtware.New(jwtware.Config{
-		ContextKey:   "token",
-		SigningKey:   []byte(utils.JwtSecret),
-		ErrorHandler: jwtError,
-	})
 }
 
 func jwtError(c *fiber.Ctx, err error) error {

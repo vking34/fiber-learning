@@ -66,10 +66,12 @@ func FacebookCallback(c *fiber.Ctx) error {
 		})
 	}
 
+	// login with existing user
 	if userRecord.ID != 0 {
 		return GenerateToken(c, userRecord)
 	}
 
+	// create user
 	var user models.User
 	user.Username = fbResp.Email
 	user.Email = fbResp.Email

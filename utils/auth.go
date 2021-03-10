@@ -32,8 +32,8 @@ func GenerateJWTToken(userID uint, username string, expireHours int) (string, er
 	jwtGenerator := jwt.New(jwt.SigningMethodHS256)
 
 	claims := jwtGenerator.Claims.(jwt.MapClaims)
-	claims["user_id"] = username
-	claims["username"] = userID
+	claims["userID"] = userID
+	claims["username"] = username
 	claims["exp"] = time.Now().Add(time.Duration(int(time.Hour) * expireHours)).Unix()
 
 	return jwtGenerator.SignedString([]byte(JwtSecret))
