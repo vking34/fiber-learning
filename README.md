@@ -8,6 +8,7 @@ A Go project I am working on for learing Go
 - OAuth
 - Upload File (Minio, AWS S3)
 - Websocket (gorilla)
+- Cache (Redis, Memcache)
 
 ## References:
 - Fiber:
