@@ -11,10 +11,10 @@ import (
 )
 
 // DB postgre DB
-var DB *gorm.DB
+var Pg *gorm.DB
 
 // ConnectDB connect to postgre
-func ConnectDB() {
+func ConnectPostgreDB() {
 	host := os.Getenv("POSTGRE_HOST")
 	port := os.Getenv("POSTGRE_PORT")
 	user := os.Getenv("POSTGRE_USER")
@@ -25,7 +25,7 @@ func ConnectDB() {
 	log.Println("dsn:", dsn)
 
 	var err error
-	DB, err = gorm.Open(postgres.New(postgres.Config{
+	Pg, err = gorm.Open(postgres.New(postgres.Config{
 		DSN:                  dsn,
 		PreferSimpleProtocol: true,
 	}), &gorm.Config{})
@@ -35,5 +35,5 @@ func ConnectDB() {
 	}
 
 	log.Println("Connected to Postgre")
-	DB.AutoMigrate(&models.User{})
+	Pg.AutoMigrate(&models.User{})
 }

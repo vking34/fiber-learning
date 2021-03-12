@@ -7,8 +7,8 @@ A Go project I am working on for learing Go
 - JWT
 - OAuth
 - Upload File (Minio, AWS S3)
-- Websocket (gorilla)
-- Cache (Redis, Memcache)
+- Websocket (go-socket.io, gorilla)
+- Cache (Redis, Memcache, encoding/gob)
 
 ## References:
 - Fiber:

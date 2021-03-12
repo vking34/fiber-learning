@@ -5,8 +5,8 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/vking34/fiber-messenger/constants"
-	"github.com/vking34/fiber-messenger/db"
 	"github.com/vking34/fiber-messenger/models"
+	"github.com/vking34/fiber-messenger/services/user_service"
 	"github.com/vking34/fiber-messenger/utils"
 	"gorm.io/gorm"
 )
@@ -39,8 +39,7 @@ func CreateUser(c *fiber.Ctx) error {
 		return nil
 	}
 
-	var users []models.User
-	result := db.DB.Where("username =?", req.Username).Or("email =?", req.Email).Find(&users)
+	result, users := user_service.FindUsersByUsernameOrEmail(req.Username, req.Email)
 	if result.RowsAffected > 0 {
 		if users[0].Username == req.Username {
 			return c.Status(400).JSON(constants.ExistingUsername)
@@ -67,7 +66,7 @@ func CreateUser(c *fiber.Ctx) error {
 	user.Password = hashedPass
 	user.Name = req.Name
 	user.Email = req.Email
-	if err := db.DB.Create(&user).Error; err != nil {
+	if err := user_service.CreateUser(&user); err != nil {
 		return c.Status(500).JSON(fiber.Map{
 			"status":  false,
 			"message": "Can not create user",

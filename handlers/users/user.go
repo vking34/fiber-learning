@@ -12,7 +12,7 @@ func GetProfile(c *fiber.Ctx) error {
 	userID := c.Locals("userID")
 	log.Println("user id:", userID)
 
-	user, err := user_service.FindUserByID(uint(userID.(float64)))
+	user, err := user_service.FindUserByID(int(userID.(float64)))
 	if err != nil {
 		return c.JSON(fiber.Map{
 			"status":  false,

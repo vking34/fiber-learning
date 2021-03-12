@@ -26,7 +26,8 @@ func main() {
 	app.Use(recover.New())
 
 	// DB
-	db.ConnectDB()
+	db.ConnectPostgreDB()
+	db.ConnectRedisDB()
 
 	// routers
 	routers.SetupRoutes(app)
