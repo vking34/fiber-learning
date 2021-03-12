@@ -1,7 +1,7 @@
 # Fiber Messenger
 A Go project I am working on for learing Go
 
-## Study Cases:
+## Case Studies:
 - Fiber
 - Gorm, Transaction
 - JWT
